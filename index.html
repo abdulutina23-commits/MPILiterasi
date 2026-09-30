@@ -152,8 +152,8 @@
 
   <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6">
 
-    <!-- Status Banner Siswa yang Aktif -->
-    <div id="banner-siswa-aktif" class="hidden mb-6 bg-gradient-to-r from-emerald-800 to-teal-800 text-white px-4 py-3 rounded-2xl shadow-md flex items-center justify-between">
+    <!-- Status Banner Murid yang Aktif -->
+    <div id="banner-Murid-aktif" class="hidden mb-6 bg-gradient-to-r from-emerald-800 to-teal-800 text-white px-4 py-3 rounded-2xl shadow-md flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold">
           <i class="fa-solid fa-user-graduate"></i>
@@ -210,12 +210,12 @@
               <i class="fa-solid fa-address-card"></i>
             </div>
             <div>
-              <h3 class="font-bold text-lg text-slate-800 font-fun">Data Peserta Didik</h3>
+              <h3 class="font-bold text-lg text-slate-800 font-fun">Data Murid</h3>
               <p class="text-xs text-slate-500">Wajib diisi sebelum mengikuti kuis penilaian otomatis.</p>
             </div>
           </div>
 
-          <form id="form-siswa" onsubmit="simpanDataSiswa(event)" class="space-y-4">
+          <form id="form-Murid" onsubmit="simpanDataMurid(event)" class="space-y-4">
             <div>
               <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Nama Lengkap Murid <span class="text-rose-500">*</span>
@@ -260,7 +260,7 @@
             </div>
 
             <div class="pt-2 flex items-center justify-between">
-              <span id="notif-simpan-siswa" class="text-xs text-emerald-600 font-semibold hidden flex items-center gap-1">
+              <span id="notif-simpan-Murid" class="text-xs text-emerald-600 font-semibold hidden flex items-center gap-1">
                 <i class="fa-solid fa-circle-check"></i> Data profil murid tersimpan!
               </span>
               <button type="submit" class="ml-auto bg-emerald-800 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-md transition-all text-sm flex items-center gap-2">
@@ -371,7 +371,7 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
           <div>
             <span class="text-xs font-bold text-teal-700 uppercase tracking-widest bg-teal-50 px-2.5 py-1 rounded-full">
-              Bahan Ajar Siswa
+              Bahan Ajar Murid
             </span>
             <h2 class="text-xl sm:text-2xl font-bold font-fun text-slate-800 mt-1">
               Tahapan Siklus Hidrologi &amp; Konservasi
@@ -812,8 +812,8 @@
         <div class="grid grid-cols-2 gap-3">
           <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl text-center">
             <p class="text-xs text-emerald-700 font-semibold mb-1">Total Responden</p>
-            <p id="stat-total-siswa" class="text-3xl font-extrabold text-emerald-900 font-fun">--</p>
-            <p class="text-[10px] text-emerald-600 mt-1">Siswa telah mengirim</p>
+            <p id="stat-total-Murid" class="text-3xl font-extrabold text-emerald-900 font-fun">--</p>
+            <p class="text-[10px] text-emerald-600 mt-1">Murid telah mengirim</p>
           </div>
           <div class="bg-sky-50 border border-sky-200 p-4 rounded-2xl text-center">
             <p class="text-xs text-sky-700 font-semibold mb-1">Nilai Rata-rata</p>
@@ -1074,7 +1074,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       // Ambil data murid dari local storage jika sebelumnya sudah mengisi
-      const tersimpan = localStorage.getItem('mpi_min1_gorut_siswa');
+      const tersimpan = localStorage.getItem('mpi_min1_gorut_Murid');
       if (tersimpan) {
         try {
           const parsed = JSON.parse(tersimpan);
@@ -1082,7 +1082,7 @@
           document.getElementById('input-nama').value = parsed.nama || '';
           document.getElementById('input-kelas').value = parsed.kelas || '';
           document.getElementById('input-kelompok').value = parsed.kelompok || 'Mode Mandiri (15 Murid)';
-          perbaruiTampilanBannerSiswa();
+          perbaruiTampilanBannerMurid();
         } catch (e) {
           console.warn('Gagal membaca cache identitas:', e);
         }
@@ -1132,7 +1132,7 @@
       }
     }
 
-    function simpanDataSiswa(e) {
+    function simpanDataMurid(e) {
       if (e) e.preventDefault();
       const nama = document.getElementById('input-nama').value.trim();
       const kelas = document.getElementById('input-kelas').value;
@@ -1144,30 +1144,30 @@
       }
 
       state.murid = { nama, kelas, kelompok };
-      localStorage.setItem('mpi_min1_gorut_siswa', JSON.stringify(state.murid));
-      perbaruiTampilanBannerSiswa();
+      localStorage.setItem('mpi_min1_gorut_Murid', JSON.stringify(state.murid));
+      perbaruiTampilanBannerMurid();
 
-      const notif = document.getElementById('notif-simpan-siswa');
+      const notif = document.getElementById('notif-simpan-Murid');
       notif.classList.remove('hidden');
       setTimeout(() => notif.classList.add('hidden'), 3000);
       tampilkanToast('Profil ' + nama + ' berhasil disimpan!', 'sukses');
     }
 
-    function perbaruiTampilanBannerSiswa() {
+    function perbaruiTampilanBannerMurid() {
       if (state.murid.nama && state.murid.kelas) {
         document.getElementById('banner-nama').textContent = state.murid.nama;
         document.getElementById('banner-kelas').textContent = state.murid.kelas;
         document.getElementById('banner-kelompok').textContent = state.murid.kelompok;
-        document.getElementById('banner-siswa-aktif').classList.remove('hidden');
+        document.getElementById('banner-Murid-aktif').classList.remove('hidden');
       }
     }
 
     function resetIdentitas() {
-      localStorage.removeItem('mpi_min1_gorut_siswa');
+      localStorage.removeItem('mpi_min1_gorut_Murid');
       state.murid = { nama: '', kelas: '', kelompok: 'Mode Mandiri (15 Murid)' };
       document.getElementById('input-nama').value = '';
       document.getElementById('input-kelas').value = '';
-      document.getElementById('banner-siswa-aktif').classList.add('hidden');
+      document.getElementById('banner-Murid-aktif').classList.add('hidden');
       navigasiKe('beranda');
       fokusKePendaftaran();
     }
@@ -1573,7 +1573,7 @@
     }
 
     function muatStatistikGuru() {
-      const elTotal = document.getElementById('stat-total-siswa');
+      const elTotal = document.getElementById('stat-total-Murid');
       const elRata = document.getElementById('stat-rata-rata');
 
       elTotal.textContent = '...';
@@ -1583,7 +1583,7 @@
         google.script.run
           .withSuccessHandler(function(res) {
             if (res) {
-              elTotal.textContent = res.totalSiswa || 0;
+              elTotal.textContent = res.totalMurid || 0;
               elRata.textContent = res.rataRata || 0;
             }
           })
@@ -1598,7 +1598,7 @@
           fetch(targetUrl + '?action=getStatistik')
             .then(res => res.json())
             .then(res => {
-              elTotal.textContent = res.totalSiswa || 0;
+              elTotal.textContent = res.totalMurid || 0;
               elRata.textContent = res.rataRata || 0;
             })
             .catch(err => {
