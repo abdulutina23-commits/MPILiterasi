@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MPI Siklus Air - MIN 1 Gorontalo Utara</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Poppins & Fredoka -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti for Celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            kemenag: {
+              DEFAULT: '#064e3b',
+              light: '#047857',
+              dark: '#022c22'
+            },
+            air: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              300: '#7dd3fc',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1'
+            }
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+            fun: ['Fredoka', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+
+    /* Water cycle floating animation */
+    @keyframes floatUpDown {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .animate-float {
+      animation: floatUpDown 3s ease-in-out infinite;
+    }
+
+    /* Vapor Rise Animation */
+    @keyframes vaporRise {
+      0% { opacity: 0.3; transform: translateY(0) scale(0.9); }
+      50% { opacity: 0.8; transform: translateY(-15px) scale(1.1); }
+      100% { opacity: 0.2; transform: translateY(-30px) scale(1.3); }
+    }
+    .vapor-particle {
+      animation: vaporRise 2.5s infinite ease-out;
+    }
+
+    /* Rain Drop Animation */
+    @keyframes rainFall {
+      0% { transform: translateY(-20px); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(60px); opacity: 0; }
+    }
+    .rain-drop {
+      animation: rainFall 1.2s infinite linear;
+    }
+
+    /* Pulse Glow */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
+      50% { box-shadow: 0 0 25px rgba(14, 165, 233, 0.8); }
+    }
+    .glow-active {
+      animation: pulseGlow 2s infinite;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-sky-50 to-teal-50 min-h-screen text-slate-800 flex flex-col font-sans selection:bg-teal-500 selection:text-white">
+
+  <!-- Header / Navigation Bar -->
+  <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-800 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-700/20">
+          <i class="fa-solid fa-droplet text-xl text-sky-200"></i>
+        </div>
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block">
+            MPI IPA Terpadu
+          </span>
+          <h1 class="text-base sm:text-lg font-bold text-slate-800 leading-tight font-fun">
+            Siklus Air &amp; Konservasi
+          </h1>
+          <p class="text-[11px] text-slate-500 hidden sm:block">
+            MIN 1 Gorontalo Utara &bull; Desa Buluwatu, Kec. Sumalata Timur
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1 sm:gap-2">
+        <button onclick="navigasiKe('beranda')" id="btn-nav-beranda" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-emerald-800 text-white shadow-sm flex items-center gap-1.5">
+          <i class="fa-solid fa-house"></i>
+          <span class="hidden md:inline">Beranda</span>
+        </button>
+        <button onclick="navigasiKe('materi')" id="btn-nav-materi" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5">
+          <i class="fa-solid fa-book-open-reader"></i>
+          <span class="hidden md:inline">Materi</span>
+        </button>
+        <button onclick="navigasiKe('konteks')" id="btn-nav-konteks" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span class="hidden md:inline">Konteks Lokal</span>
+        </button>
+        <button onclick="navigasiKe('simulasi')" id="btn-nav-simulasi" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5">
+          <i class="fa-solid fa-diagram-project"></i>
+          <span class="hidden md:inline">Simulasi</span>
+        </button>
+        <button onclick="navigasiKe('kuis')" id="btn-nav-kuis" class="nav-btn px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-question"></i>
+          <span class="hidden md:inline">Kuis Evaluasi</span>
+        </button>
+        <button onclick="bukaModalStatistik()" class="px-2.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-emerald-800 hover:bg-emerald-100 border border-emerald-300 transition-all flex items-center gap-1.5" title="Panel Data Guru">
+          <i class="fa-solid fa-chart-line"></i>
+          <span class="hidden lg:inline">Panel Guru</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6">
+
+    <!-- Status Banner Siswa yang Aktif -->
+    <div id="banner-siswa-aktif" class="hidden mb-6 bg-gradient-to-r from-emerald-800 to-teal-800 text-white px-4 py-3 rounded-2xl shadow-md flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold">
+          <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div>
+          <p class="text-xs text-emerald-200">Murid Aktif Terdaftar:</p>
+          <p class="font-bold text-sm sm:text-base leading-tight"><span id="banner-nama">Ahmad Fauzan</span> (<span id="banner-kelas">Kelas 5A</span>)</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="banner-kelompok" class="text-xs bg-emerald-900/60 border border-emerald-400/30 px-3 py-1 rounded-full text-emerald-200">Mode Mandiri (15 Murid)</span>
+        <button onclick="resetIdentitas()" class="text-xs hover:text-rose-200 underline ml-2">Ganti</button>
+      </div>
+    </div>
+
+    <!-- SECTION 1: BERANDA & REGISTRASI -->
+    <section id="section-beranda" class="space-y-6">
+      <!-- Hero Card -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-900 via-teal-800 to-sky-900 text-white p-6 sm:p-10 shadow-xl">
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-white pointer-events-none">
+          <i class="fa-solid fa-water text-9xl"></i>
+        </div>
+
+        <div class="max-w-2xl relative z-10">
+          <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium text-emerald-200 mb-4 border border-white/10">
+            <i class="fa-solid fa-mosque"></i>
+            <span>Madrasah Ramah Lingkungan &bull; Kurikulum Merdeka</span>
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-extrabold font-fun leading-tight mb-3">
+            Jelajahi Siklus Air &amp; Jaga Keberkahan Bumi Gorontalo Utara!
+          </h2>
+          <p class="text-sm sm:text-base text-emerald-100/90 leading-relaxed mb-6 font-light">
+            Mari pelajari bagaimana setetes air dari pesisir Buluwatu menguap ke angkasa, menjadi awan sejuk di pegunungan Sumalata Timur, dan kembali menyuburkan alam ciptaan Allah SWT.
+          </p>
+
+          <div class="flex flex-wrap gap-3">
+            <button onclick="fokusKePendaftaran()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-6 py-3 rounded-2xl shadow-lg shadow-amber-500/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+              <i class="fa-solid fa-pen-fancy"></i>
+              <span>Mulai Belajar Sekarang</span>
+            </button>
+            <button onclick="navigasiKe('simulasi')" class="bg-white/15 hover:bg-white/25 text-white font-medium px-5 py-3 rounded-2xl backdrop-blur-md transition-all flex items-center gap-2">
+              <i class="fa-solid fa-play"></i>
+              <span>Simulasi Siklus</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Form Identitas Murid -->
+        <div class="lg:col-span-2 bg-white p-6 sm:p-8 rounded-3xl border border-emerald-100 shadow-sm">
+          <div class="flex items-center gap-3 mb-5 border-b pb-4 border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-address-card"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-slate-800 font-fun">Data Peserta Didik</h3>
+              <p class="text-xs text-slate-500">Wajib diisi sebelum mengikuti kuis penilaian otomatis.</p>
+            </div>
+          </div>
+
+          <form id="form-siswa" onsubmit="simpanDataSiswa(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Nama Lengkap Murid <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <i class="fa-solid fa-user absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                <input type="text" id="input-nama" required placeholder="Contoh: Siti Nurhaliza Djafar" class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm transition">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Kelas / Rombel <span class="text-rose-500">*</span>
+                </label>
+                <div class="relative">
+                  <i class="fa-solid fa-school absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                  <select id="input-kelas" required class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm appearance-none bg-white">
+                    <option value="" disabled selected>Pilih Rombongan Belajar</option>
+                    <option value="Kelas 5A">Kelas 5A - Ibnu Sina</option>
+                    <option value="Kelas 5B">Kelas 5B - Al-Khawarizmi</option>
+                    <option value="Kelas 6">Kelas 6 - Al-Biruni</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Kelompok Belajar
+                </label>
+                <div class="relative">
+                  <i class="fa-solid fa-users absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                  <select id="input-kelompok" class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm appearance-none bg-white">
+                    <option value="Mode Mandiri (15 Murid)" selected>Mode Mandiri (15 Murid)</option>
+                    <option value="Kelompok 1 (Presipitasi)">Kelompok 1 (Presipitasi)</option>
+                    <option value="Kelompok 2 (Evaporasi)">Kelompok 2 (Evaporasi)</option>
+                    <option value="Kelompok 3 (Kondensasi)">Kelompok 3 (Kondensasi)</option>
+                    <option value="Kelompok 4 (Infiltrasi)">Kelompok 4 (Infiltrasi)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between">
+              <span id="notif-simpan-siswa" class="text-xs text-emerald-600 font-semibold hidden flex items-center gap-1">
+                <i class="fa-solid fa-circle-check"></i> Data tersimpan! Siap lanjut belajar.
+              </span>
+              <button type="submit" class="ml-auto bg-emerald-800 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-md transition-all text-sm flex items-center gap-2">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>Simpan Profil</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Kartu Nilai Islami & Tadabbur Surah An-Nur Ayat 43 -->
+        <div class="bg-gradient-to-br from-emerald-800 via-teal-900 to-slate-900 text-white p-6 sm:p-7 rounded-3xl shadow-sm flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2 text-emerald-200 text-xs font-bold uppercase tracking-wider">
+                <i class="fa-solid fa-book-quran text-amber-300 text-base"></i>
+                <span>Tadabbur Ayat Al-Qur'an</span>
+              </div>
+              <span class="inline-block text-[11px] bg-emerald-700/60 border border-emerald-400/30 px-2.5 py-0.5 rounded-full text-emerald-100 font-semibold">
+                QS. An-Nur : 43
+              </span>
+            </div>
+
+            <!-- Teks Arab Full Surah An-Nur: 43 -->
+            <div class="bg-black/20 p-4 rounded-2xl border border-white/10 mb-3">
+              <p class="font-serif text-right text-base sm:text-lg leading-loose text-amber-200 tracking-wide dir-rtl" dir="rtl">
+                أَلَمْ تَرَ أَنَّ اللَّهَ يُزْجِي سَحَابًا ثُمَّ يُؤَلِّفُ بَيْنَهُ ثُمَّ يَجْعَلُهُ رُكَامًا فَتَرَى الْوَدْقَ يَخْرُجُ مِنْ خِلَالِهِ وَيُنَزِّلُ مِنَ السَّمَاءِ مِنْ جِبَالٍ فِيهَا مِنْ بَرَدٍ فَيُصِيبُ بِهِ مَنْ يَشَاءُ وَيَصْرِفُهُ عَنْ مَنْ يَشَاءُ ۖ يَكَادُ سَنَا بَرْقِهِ يَذْهَبُ بِالْأَبْصَارِ
+              </p>
+            </div>
+
+            <!-- Terjemahan Bahasa Indonesia -->
+            <div class="space-y-1 mb-3">
+              <span class="text-[11px] font-bold text-amber-300 uppercase tracking-wider block">Terjemahan:</span>
+              <p class="text-xs text-emerald-100 leading-relaxed italic bg-emerald-950/40 p-3 rounded-xl border border-emerald-700/30">
+                &ldquo;Tidakkah engkau melihat bahwa Allah mengarak awan, kemudian mengumpulkan antara (bagian-bagian)-nya, lalu menjadikannya bertindih-tindih, maka engkau melihat hujan keluar dari celah-celahnya, dan Dia menurunkan (pula butiran-butiran) es dari langit, (yaitu) dari (gumpalan-gumpalan awan seperti) gunung-gunung, maka ditimpakan-Nya (butiran-butiran es) itu kepada siapa yang Dia kehendaki dan dipalingkan-Nya dari siapa yang Dia kehendaki. Kilauan kilatnya hampir-hampir menghilangkan penglihatan.&rdquo;
+              </p>
+            </div>
+
+            <!-- Makna Sains Hidrologi & Asbabunnuzul -->
+            <div class="space-y-2.5 text-xs text-emerald-100/90">
+              <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+                <p class="font-bold text-emerald-300 flex items-center gap-1.5 mb-1">
+                  <i class="fa-solid fa-microscope text-amber-300"></i>
+                  <span>Makna Sains &amp; Siklus Air:</span>
+                </p>
+                <p class="text-[11px] leading-relaxed text-slate-200">
+                  Ayat ini memaparkan fase mikrofisika awan secara akurat jauh sebelum teknologi meteorologi modern ada: dari pengarakan awan (<em>evaporasi &amp; adveksi</em>), penyatuan sel awan (<em>kondensasi</em>), pembentukan awan kumulonimbus tebal laksana gunung (<em>rukama</em>), hingga pelepasan presipitasi hujan (<em>al-wadq</em>), hujan es (<em>barad</em>), dan petir.
+                </p>
+              </div>
+
+              <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+                <p class="font-bold text-emerald-300 flex items-center gap-1.5 mb-1">
+                  <i class="fa-solid fa-scroll text-amber-300"></i>
+                  <span>Asbabunnuzul &amp; Konteks Penurunan:</span>
+                </p>
+                <p class="text-[11px] leading-relaxed text-slate-200">
+                  Para mufassir menjelaskan ayat ini diturunkan untuk membantah kaum musyrikin yang meragukan kekuasaan Allah membangkitkan kehidupan setelah mati. Allah mengarahkan akal manusia agar menyaksikan fenomena alam di hadapan mata mereka: bagaimana langit yang kering dihidupkan kembali dengan gumpalan awan dan hujan sebagai bukti mutlak kemahakuasaan-Nya.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-emerald-700/60 text-xs text-emerald-200/90 leading-relaxed">
+            <p><i class="fa-solid fa-leaf text-emerald-400 mr-1.5"></i> <strong>Amanah Madrasah:</strong> Menyaksikan turunnya hujan di Buluwatu adalah momen mentadabburi kebesaran Allah SWT sekaligus panggilan menjaga kelestarian lingkungan madrasah.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Pilar Menu Singkat -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div onclick="pilihTahapanMateri('evaporasi')" class="cursor-pointer bg-white p-4 rounded-2xl border border-sky-100 hover:border-sky-300 hover:shadow-md transition text-center group">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
+            <i class="fa-solid fa-sun text-amber-500"></i>
+          </div>
+          <h4 class="font-bold text-sm text-slate-800">1. Evaporasi</h4>
+          <p class="text-xs text-slate-500 mt-1">Penguapan air laut &amp; sungai</p>
+        </div>
+
+        <div onclick="pilihTahapanMateri('kondensasi')" class="cursor-pointer bg-white p-4 rounded-2xl border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition text-center group">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
+            <i class="fa-solid fa-cloud text-indigo-500"></i>
+          </div>
+          <h4 class="font-bold text-sm text-slate-800">2. Kondensasi</h4>
+          <p class="text-xs text-slate-500 mt-1">Pembentukan awan dingin</p>
+        </div>
+
+        <div onclick="pilihTahapanMateri('presipitasi')" class="cursor-pointer bg-white p-4 rounded-2xl border border-blue-100 hover:border-blue-300 hover:shadow-md transition text-center group">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
+            <i class="fa-solid fa-cloud-showers-heavy text-blue-500"></i>
+          </div>
+          <h4 class="font-bold text-sm text-slate-800">3. Presipitasi</h4>
+          <p class="text-xs text-slate-500 mt-1">Hujan membasahi bumi</p>
+        </div>
+
+        <div onclick="pilihTahapanMateri('infiltrasi')" class="cursor-pointer bg-white p-4 rounded-2xl border border-emerald-100 hover:border-emerald-300 hover:shadow-md transition text-center group">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
+            <i class="fa-solid fa-seedling text-emerald-600"></i>
+          </div>
+          <h4 class="font-bold text-sm text-slate-800">4. Infiltrasi</h4>
+          <p class="text-xs text-slate-500 mt-1">Penyerapan air ke tanah</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: MATERI LENGKAP -->
+    <section id="section-materi" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+          <div>
+            <span class="text-xs font-bold text-teal-700 uppercase tracking-widest bg-teal-50 px-2.5 py-1 rounded-full">
+              Bahan Ajar Siswa
+            </span>
+            <h2 class="text-xl sm:text-2xl font-bold font-fun text-slate-800 mt-1">
+              Tahapan Siklus Hidrologi &amp; Konservasi
+            </h2>
+          </div>
+
+          <!-- Tab navigasi tahapan -->
+          <div class="flex flex-wrap gap-2">
+            <button onclick="tampilkanDetailMateri('evaporasi')" id="tab-evaporasi" class="materi-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-800 text-white transition">Evaporasi</button>
+            <button onclick="tampilkanDetailMateri('transpirasi')" id="tab-transpirasi" class="materi-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">Transpirasi</button>
+            <button onclick="tampilkanDetailMateri('kondensasi')" id="tab-kondensasi" class="materi-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">Kondensasi</button>
+            <button onclick="tampilkanDetailMateri('presipitasi')" id="tab-presipitasi" class="materi-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">Presipitasi</button>
+            <button onclick="tampilkanDetailMateri('infiltrasi')" id="tab-infiltrasi" class="materi-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">Infiltrasi</button>
+            <button onclick="tampilkanDetailMateri('konservasi')" id="tab-konservasi" class="materi-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-amber-800 bg-amber-50 hover:bg-amber-100 transition">Aksi Konservasi</button>
+          </div>
+        </div>
+
+        <!-- Konten Materi Dinamis -->
+        <div id="materi-container" class="space-y-6">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION BARU: KONTEKSTUALISASI LINGKUNGAN LOKAL GORONTALO UTARA -->
+    <section id="section-konteks" class="hidden space-y-6">
+      <div class="bg-[#082e25] text-slate-100 rounded-3xl p-6 sm:p-9 border border-emerald-800/60 shadow-xl space-y-6">
+        <!-- Header Konteks Lokal -->
+        <div class="border-b border-emerald-800/80 pb-5">
+          <p class="text-[11px] sm:text-xs font-bold text-emerald-400 tracking-wider uppercase mb-1">
+            KONTEKSTUALISASI LINGKUNGAN LOKAL GORONTALO UTARA
+          </p>
+          <h2 class="text-2xl sm:text-3xl font-extrabold font-fun text-white tracking-tight">
+            Siklus Air bagi Petani &amp; Nelayan Desa Buluwatu
+          </h2>
+          <p class="text-xs sm:text-sm text-emerald-200/90 mt-1 font-light leading-relaxed">
+            Mengaitkan teori IPA dengan denyut mata pencaharian masyarakat pesisir dan agraris di Kecamatan Sumalata Timur.
+          </p>
+        </div>
+
+        <!-- 4 Grid Kartu Studi Kasus & Konteks Lapangan -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+          <!-- KARTU 1: Nelayan Pesisir Laut Sulawesi -->
+          <div class="bg-[#0b382e] border border-emerald-700/50 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-lg">
+            <div class="space-y-3.5">
+              <div class="flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-2xl flex-shrink-0">
+                  <i class="fa-solid fa-sailboat"></i>
+                </div>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-white leading-tight font-fun">
+                    Nelayan Pesisir Laut Sulawesi
+                  </h3>
+                  <p class="text-xs font-semibold text-emerald-300">
+                    Perahu Katinting &amp; Sirkulasi Angin Bahari
+                  </p>
+                </div>
+              </div>
+
+              <p class="text-xs sm:text-sm text-slate-200/90 leading-relaxed font-light">
+                Wali murid kita yang melaut mencari ikan sangat bergantung pada siklus angin laut. Saat terik, penguapan intens memicu pembentukan awan tebal di sore hari. Pemahaman ini krusial bagi keselamatan pelayaran.
+              </p>
+            </div>
+
+            <!-- Box Fakta Sains Bahari -->
+            <div class="mt-4 bg-[#06241c] p-3.5 rounded-xl border border-emerald-800/80 text-xs text-slate-200 space-y-1">
+              <p class="font-bold text-amber-300 flex items-center gap-1.5 text-xs">
+                <span>💡 Fakta Sains Bahari:</span>
+              </p>
+              <p class="text-[11px] leading-relaxed text-slate-300">
+                Evaporasi ekstrem memicu terbentuknya awan kumulonimbus yang sering membawa angin kencang mendadak.
+              </p>
+            </div>
+          </div>
+
+          <!-- KARTU 2: Petani Padi & Hulu Perbukitan -->
+          <div class="bg-[#0b382e] border border-emerald-700/50 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-lg">
+            <div class="space-y-3.5">
+              <div class="flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-400/20 text-emerald-300 flex items-center justify-center text-2xl flex-shrink-0">
+                  <i class="fa-solid fa-wheat-awn"></i>
+                </div>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-white leading-tight font-fun">
+                    Petani Padi &amp; Hulu Perbukitan
+                  </h3>
+                  <p class="text-xs font-semibold text-emerald-300">
+                    Irigasi Sawah &amp; Infiltrasi Lereng Hijau
+                  </p>
+                </div>
+              </div>
+
+              <p class="text-xs sm:text-sm text-slate-200/90 leading-relaxed font-light">
+                Sawah warga mendapatkan pasokan air dari sungai kecil perbukitan. Akar pepohonan menyerap air hujan ke lapisan akuifer sehingga irigasi tidak kering saat musim timur tiba.
+              </p>
+            </div>
+
+            <!-- Box Konservasi Alam -->
+            <div class="mt-4 bg-[#06241c] p-3.5 rounded-xl border border-emerald-800/80 text-xs text-slate-200 space-y-1">
+              <p class="font-bold text-emerald-400 flex items-center gap-1.5 text-xs">
+                <span>🌱 Konservasi Alam:</span>
+              </p>
+              <p class="text-[11px] leading-relaxed text-slate-300">
+                Menjaga lereng tetap rimbun mencegah erosi lumpur yang mendangkalkan irigasi.
+              </p>
+            </div>
+          </div>
+
+          <!-- KARTU 3: Ancaman Sedimentasi (Studi Kasus 1) -->
+          <div class="bg-[#0b382e] border border-emerald-700/50 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-lg">
+            <div class="space-y-3.5">
+              <div class="flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl flex-shrink-0">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-white leading-tight font-fun">
+                    Ancaman Sedimentasi
+                  </h3>
+                  <p class="text-xs font-semibold text-teal-300">
+                    Studi Kasus 1
+                  </p>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-200 leading-relaxed font-light text-justify">
+                Desa Buluwatu memiliki dua bentang alam yang saling terhubung: perbukitan Sumalata Timur di hulu dan pesisir Laut Sulawesi di hilir. Petani di lereng bukit mengandalkan sistem terasering untuk menahan air dan mencegah erosi. Sementara itu, nelayan perahu katinting bergantung pada stabilitas cuaca lokal dan terumbu karang yang sehat sebagai habitat ikan malalugis serta tuna. Selama dua tahun terakhir, pembukaan lahan terbuka tanpa terasering seluas 15 hektare terjadi di lereng atas. Curah hujan bulanan tercatat sebesar 300 mm/bulan. Lahan terbuka melepaskan lumpur sebesar 40 ton/hektare/tahun menuju aliran sungai desa. Lahan berterasering rimbun hanya melepaskan 2 ton/hektare/tahun. Kekeruhan air muara meningkat dari 5 NTU menjadi 45 NTU. Tingkat kekeruhan di atas 25 NTU menghambat fotosintesis alga zooxanthellae pada karang, sehingga tutupan karang hidup menurun dari 60% menjadi 35%. Penurunan ini memicu migrasi ikan malalugis menjauh sejauh 8 mil laut dari garis pantai.
+              </p>
+            </div>
+
+            <!-- Box Pertanyaan Kritis Studi Kasus 1 -->
+            <div class="mt-4 bg-[#06241c] p-3.5 rounded-xl border border-emerald-800/80 text-xs space-y-1">
+              <p class="font-bold text-emerald-400 flex items-center gap-1.5 text-xs">
+                <span>🌱 Pertanyaan Kritis:</span>
+              </p>
+              <p class="text-[11px] leading-relaxed text-slate-200 font-light text-justify">
+                Jelaskan rantai kausalitas biofisik yang menghubungkan penggundulan lereng perbukitan Sumalata Timur dengan hilangnya populasi ikan malalugis di pesisir Buluwatu. Gunakan konsep laju sedimentasi, penetrasi cahaya matahari, dan simbiosis terumbu karang dalam penjelasanmu!
+              </p>
+            </div>
+          </div>
+
+          <!-- KARTU 4: Dampak Ekologis (Studi Kasus 2) -->
+          <div class="bg-[#0b382e] border border-emerald-700/50 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-lg">
+            <div class="space-y-3.5">
+              <div class="flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-sky-400/20 text-sky-300 flex items-center justify-center text-2xl flex-shrink-0">
+                  <i class="fa-solid fa-chart-simple"></i>
+                </div>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-white leading-tight font-fun">
+                    Dampak Ekologis
+                  </h3>
+                  <p class="text-xs font-semibold text-teal-300">
+                    Studi Kasus 2
+                  </p>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-200 leading-relaxed font-light text-justify">
+                Penguapan ekstrem di Laut Sulawesi memicu awan kumulonimbus lokal setiap sore pukul 15.30 WITA dengan kecepatan angin mencapai 28 knot. Nelayan perahu katinting bermesin tempel kecil (kecepatan jelajah rata-rata 6 knot) kini harus menempuh jarak melaut 12 mil laut (sebelumnya hanya 4 mil laut) untuk mendapatkan kuota tangkapan yang sama.
+              </p>
+            </div>
+
+            <!-- Box Pertanyaan Kritis Studi Kasus 2 -->
+            <div class="mt-4 bg-[#06241c] p-3.5 rounded-xl border border-emerald-800/80 text-xs space-y-1">
+              <p class="font-bold text-emerald-400 flex items-center gap-1.5 text-xs">
+                <span>🌱 Pertanyaan Kritis:</span>
+              </p>
+              <p class="text-[11px] leading-relaxed text-slate-200 font-light text-justify">
+                Nelayan katinting mulai berangkat melaut pukul 12.00 WITA menuju area tangkapan baru (jarak 12 mil laut). Berdasarkan kecepatan jelajah perahu (6 knot), hitung jam tiba perahu di lokasi tangkapan. Evaluasi apakah nelayan tersebut berisiko terjebak badai kumulonimbus jika mereka membutuhkan waktu minimal 2 jam untuk menangkap ikan sebelum kembali ke pantai. Rancang satu solusi terpadu berbasis vegetasi hulu dan strategi mitigasi waktu berlayar bagi nelayan agar aktivitas ekonomi tetap aman!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: SIMULASI SIKLUS AIR INTERAKTIF -->
+    <section id="section-simulasi" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold font-fun text-slate-800">
+              Laboratorium Virtual Siklus Air
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500">
+              Klik setiap tombol tahapan di bawah untuk melihat animasi pergerakan molekul air di alam.
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="resetSimulasi()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl font-medium transition flex items-center gap-1">
+              <i class="fa-solid fa-rotate-right"></i> Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas / Visual Area Interaktif -->
+        <div class="relative w-full h-[400px] sm:h-[460px] rounded-2xl overflow-hidden border border-slate-200 bg-gradient-to-b from-sky-300 via-sky-100 to-emerald-100 select-none">
+          <!-- Matahari -->
+          <div id="sim-sun" class="absolute top-6 left-8 text-center cursor-pointer transition transform hover:scale-110">
+            <div class="w-16 h-16 rounded-full bg-amber-400 border-4 border-amber-300 shadow-[0_0_35px_rgba(251,191,36,0.8)] flex items-center justify-center text-amber-800 text-2xl animate-spin" style="animation-duration: 20s;">
+              <i class="fa-solid fa-sun"></i>
+            </div>
+            <span class="text-[11px] font-bold text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded-full mt-1 inline-block shadow-sm">Energi Panas</span>
+          </div>
+
+          <!-- Awan & Kondensasi -->
+          <div id="sim-cloud-1" class="absolute top-10 left-1/3 transition-all duration-700 cursor-pointer">
+            <div class="text-slate-200 hover:text-slate-100 transition drop-shadow-md">
+              <i class="fa-solid fa-cloud text-7xl sm:text-8xl"></i>
+            </div>
+            <span id="cloud-label" class="text-[11px] font-bold text-slate-700 bg-white/90 px-2 py-0.5 rounded-full -mt-2 inline-block shadow-sm ml-4">Awan Sejuk</span>
+          </div>
+
+          <!-- Awan Gelap Hujan -->
+          <div id="sim-rain-cloud" class="absolute top-12 right-12 transition-all duration-700 opacity-60">
+            <div class="text-slate-500">
+              <i class="fa-solid fa-cloud text-7xl sm:text-8xl"></i>
+            </div>
+            <!-- Titik Hujan yang Jatuh -->
+            <div id="rain-drops-container" class="absolute top-16 left-6 flex gap-2">
+              <span class="rain-drop text-sky-600 text-sm font-bold">💧</span>
+              <span class="rain-drop text-sky-500 text-xs font-bold" style="animation-delay: 0.3s;">💧</span>
+              <span class="rain-drop text-sky-600 text-sm font-bold" style="animation-delay: 0.6s;">💧</span>
+              <span class="rain-drop text-sky-500 text-xs font-bold" style="animation-delay: 0.9s;">💧</span>
+            </div>
+          </div>
+
+          <!-- Gunung & Bukit Sumalata Timur -->
+          <div class="absolute bottom-16 right-0 w-2/3 h-48 pointer-events-none">
+            <svg viewBox="0 0 500 200" class="w-full h-full preserve-3d" preserveAspectRatio="none">
+              <polygon points="120,200 240,40 380,200" fill="#047857" opacity="0.9"/>
+              <polygon points="260,200 370,60 490,200" fill="#065f46" opacity="0.95"/>
+              <polygon points="340,200 440,80 500,200" fill="#064e3b" opacity="1.0"/>
+              <!-- Salju/Kabut Puncak -->
+              <polygon points="230,55 240,40 250,55" fill="#f8fafc"/>
+            </svg>
+          </div>
+
+          <!-- Lautan & Muara Sungai Buluwatu -->
+          <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sky-700 via-sky-600 to-sky-500 border-t-4 border-teal-300 flex items-center justify-between px-6 text-white text-xs font-bold">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-water text-lg text-sky-200"></i>
+              <span>Lautan / Pesisir Gorontalo Utara</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-mountain-sun text-emerald-300"></i>
+              <span>Daerah Aliran Sungai (DAS)</span>
+            </div>
+          </div>
+
+          <!-- Uap Air (Evaporasi Partikel) -->
+          <div id="vapor-particles" class="absolute bottom-28 left-16 flex gap-4 pointer-events-none hidden">
+            <div class="vapor-particle text-sky-500 text-xl font-bold">♨</div>
+            <div class="vapor-particle text-sky-400 text-2xl font-bold" style="animation-delay: 0.4s;">♨</div>
+            <div class="vapor-particle text-sky-500 text-lg font-bold" style="animation-delay: 0.8s;">♨</div>
+          </div>
+
+          <!-- Kotak Keterangan Interaktif di Dalam Simulasi -->
+          <div id="sim-info-box" class="absolute bottom-28 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-sky-200 shadow-xl text-xs text-slate-700 transition">
+            <div class="flex items-center justify-between mb-1.5">
+              <h4 id="sim-info-title" class="font-bold text-sky-900 text-sm font-fun flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-info text-sky-600"></i>
+                <span>Petunjuk Simulasi</span>
+              </h4>
+              <span id="sim-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800">Siap</span>
+            </div>
+            <p id="sim-info-desc" class="leading-relaxed">
+              Silakan pilih salah satu tombol proses di panel bawah untuk menjalankan tahapan siklus air secara visual.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi Simulasi -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          <button onclick="jalankanProsesSimulasi('evaporasi')" class="p-3 rounded-2xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 text-xs sm:text-sm font-bold flex flex-col items-center justify-center gap-1 transition">
+            <i class="fa-solid fa-water text-lg text-sky-600"></i>
+            <span>1. Uapkan Air (Evaporasi)</span>
+          </button>
+          <button onclick="jalankanProsesSimulasi('kondensasi')" class="p-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 text-xs sm:text-sm font-bold flex flex-col items-center justify-center gap-1 transition">
+            <i class="fa-solid fa-cloud text-lg text-indigo-600"></i>
+            <span>2. Bentuk Awan (Kondensasi)</span>
+          </button>
+          <button onclick="jalankanProsesSimulasi('presipitasi')" class="p-3 rounded-2xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 text-xs sm:text-sm font-bold flex flex-col items-center justify-center gap-1 transition">
+            <i class="fa-solid fa-cloud-showers-heavy text-lg text-blue-600"></i>
+            <span>3. Turunkan Hujan (Presipitasi)</span>
+          </button>
+          <button onclick="jalankanProsesSimulasi('infiltrasi')" class="p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-bold flex flex-col items-center justify-center gap-1 transition">
+            <i class="fa-solid fa-arrow-down-long text-lg text-emerald-600"></i>
+            <span>4. Resapan Air (Infiltrasi)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: KUIS EVALUASI (5 SOAL TERINTEGRASI GAS) -->
+    <section id="section-kuis" class="hidden space-y-6">
+      <!-- Layar Persiapan Kuis -->
+      <div id="kuis-intro" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 text-center max-w-2xl mx-auto shadow-sm">
+        <div class="w-20 h-20 rounded-3xl bg-emerald-100 text-emerald-800 mx-auto flex items-center justify-center text-3xl mb-4 shadow-inner">
+          <i class="fa-solid fa-clipboard-question"></i>
+        </div>
+        <h2 class="text-2xl font-bold font-fun text-slate-800 mb-2">Evaluasi Mandiri Siklus Air</h2>
+        <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+          Kuis ini terdiri dari <strong>5 butir soal pilihan ganda</strong>. Setiap jawaban benar bernilai 20 poin (total 100 poin). Nilai Anda akan langsung terekam otomatis ke <em>Google Spreadsheet</em> guru MIN 1 Gorontalo Utara.
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left text-xs text-slate-700 space-y-2 mb-6">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span><strong>Murid:</strong> <span id="kuis-cek-nama" class="font-bold text-slate-900">-</span></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span><strong>Kelas:</strong> <span id="kuis-cek-kelas" class="font-bold text-slate-900">-</span></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span><strong>Kelompok:</strong> <span id="kuis-cek-kelompok" class="font-bold text-slate-900">-</span></span>
+          </div>
+        </div>
+
+        <button onclick="mulaiKuisSekarang()" class="bg-emerald-800 hover:bg-emerald-700 text-white font-bold px-8 py-3 rounded-2xl shadow-lg shadow-emerald-900/20 text-sm transition transform hover:-translate-y-0.5 flex items-center gap-2 mx-auto">
+          <i class="fa-solid fa-play"></i>
+          <span>Mulai Kerjakan Soal</span>
+        </button>
+      </div>
+
+      <!-- Box Soal Berjalan -->
+      <div id="kuis-box" class="hidden bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm max-w-2xl mx-auto">
+        <!-- Progress Bar -->
+        <div class="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
+          <span>Soal <span id="nomor-soal-aktif">1</span> dari 5</span>
+          <span id="label-persen-kuis" class="text-emerald-700">20%</span>
+        </div>
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-6">
+          <div id="bar-progress-kuis" class="bg-emerald-600 h-full w-1/5 transition-all duration-300"></div>
+        </div>
+
+        <!-- Pertanyaan -->
+        <div class="mb-6">
+          <h3 id="pertanyaan-teks" class="text-base sm:text-lg font-bold text-slate-800 leading-snug">
+            Memuat pertanyaan...
+          </h3>
+        </div>
+
+        <!-- Pilihan Jawaban (A, B, C, D) -->
+        <div id="opsi-jawaban-container" class="space-y-3 mb-6">
+          <!-- Diisi otomatis oleh JavaScript -->
+        </div>
+
+        <!-- Tombol Aksi Soal -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+          <button onclick="soalSebelumnya()" id="btn-soal-prev" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 transition disabled:opacity-30 disabled:pointer-events-none">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+          </button>
+          <button onclick="soalSelanjutnya()" id="btn-soal-next" class="bg-emerald-800 hover:bg-emerald-700 text-white px-6 py-2 rounded-xl text-xs font-bold transition shadow-md flex items-center gap-1.5">
+            <span>Lanjut</span>
+            <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tampilan Hasil Akhir & Status Sinkronisasi GAS -->
+      <div id="kuis-hasil" class="hidden bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm max-w-2xl mx-auto text-center space-y-6">
+        <div class="inline-block p-4 rounded-3xl bg-amber-50 text-amber-500 border border-amber-200 mb-2">
+          <i class="fa-solid fa-award text-5xl"></i>
+        </div>
+
+        <div>
+          <span class="text-xs uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
+            Hasil Penilaian Akhir
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-fun text-slate-800 mt-2">
+            Alhamdulillah, Evaluasi Selesai!
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Terima kasih telah berpartisipasi aktif dalam menjaga kelestarian alam.
+          </p>
+        </div>
+
+        <!-- Rangkuman Nilai -->
+        <div class="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+          <div>
+            <p class="text-[11px] text-slate-500 uppercase font-semibold">Skor Akhir</p>
+            <p id="hasil-skor" class="text-3xl sm:text-4xl font-extrabold text-emerald-700 font-fun">0</p>
+          </div>
+          <div>
+            <p class="text-[11px] text-slate-500 uppercase font-semibold">Jawaban Benar</p>
+            <p id="hasil-benar" class="text-3xl sm:text-4xl font-extrabold text-sky-600 font-fun">0 / 5</p>
+          </div>
+          <div>
+            <p class="text-[11px] text-slate-500 uppercase font-semibold">Predikat</p>
+            <p id="hasil-predikat" class="text-sm sm:text-base font-bold text-slate-800 mt-2">Memuaskan</p>
+          </div>
+        </div>
+
+        <!-- Status Pengiriman ke Google Apps Script -->
+        <div id="status-kirim-gas" class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-center justify-center gap-3">
+          <i class="fa-solid fa-spinner fa-spin text-lg"></i>
+          <span>Menyimpan nilai ke Google Spreadsheet guru MIN 1 Gorontalo Utara...</span>
+        </div>
+
+        <!-- Tombol Ulang / Review -->
+        <div class="flex flex-wrap gap-3 justify-center pt-2">
+          <button onclick="ulangiKuis()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50 transition">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Ulangi Kuis
+          </button>
+          <button onclick="navigasiKe('materi')" class="px-5 py-2.5 rounded-xl bg-emerald-800 text-white font-bold text-xs hover:bg-emerald-700 shadow-md transition">
+            <i class="fa-solid fa-book-open mr-1"></i> Baca Materi Lagi
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: PANEL STATISTIK GURU (Memanggil ambilStatistikRingkas GAS) -->
+  <div id="modal-guru" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 transform transition-all">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-base">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-slate-800">Panel Data Guru</h3>
+            <p class="text-[11px] text-slate-500">Sheet: <code>Nilai_Siklus_Air</code></p>
+          </div>
+        </div>
+        <button onclick="tutupModalStatistik()" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Ringkasan Statistik -->
+      <div class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl text-center">
+            <p class="text-xs text-emerald-700 font-semibold mb-1">Total Responden</p>
+            <p id="stat-total-siswa" class="text-3xl font-extrabold text-emerald-900 font-fun">--</p>
+            <p class="text-[10px] text-emerald-600 mt-1">Siswa telah mengirim</p>
+          </div>
+          <div class="bg-sky-50 border border-sky-200 p-4 rounded-2xl text-center">
+            <p class="text-xs text-sky-700 font-semibold mb-1">Nilai Rata-rata</p>
+            <p id="stat-rata-rata" class="text-3xl font-extrabold text-sky-900 font-fun">--</p>
+            <p class="text-[10px] text-sky-600 mt-1">Skala 0 - 100</p>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-1.5">
+          <p class="font-semibold text-slate-800"><i class="fa-solid fa-circle-info text-emerald-600 mr-1"></i> Informasi Database:</p>
+          <p>Terhubung langsung ke Google Sheets aktif guru MIN 1 Gorontalo Utara via Google Apps Script.</p>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button onclick="muatStatistikGuru()" class="w-full bg-emerald-800 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-sm transition">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Segarkan Data Sekarang</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-10 py-5 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>
+        &copy; 2026 <strong>MIN 1 Gorontalo Utara</strong> &bull; Desa Buluwatu, Kec. Sumalata Timur, Kab. Gorontalo Utara.
+      </p>
+      <div class="flex items-center gap-3 text-slate-400">
+        <span>Madrasah Mandiri Berprestasi</span>
+        <span>&bull;</span>
+        <span class="text-emerald-700 font-semibold"><i class="fa-solid fa-seedling text-emerald-600"></i> Peduli Lingkungan</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Global Application State */
+    const state = {
+      murid: {
+        nama: '',
+        kelas: '',
+        kelompok: 'Mode Mandiri (15 Murid)'
+      },
+      materiAktif: 'evaporasi',
+      soalIndex: 0,
+      jawabanMurid: {},
+      skorAkhir: 0,
+      sudahSubmit: false
+    };
+
+    // Data Materi Interaktif
+    const dataMateri = {
+      evaporasi: {
+        judul: '1. Evaporasi (Penguapan Permukaan Air)',
+        ikon: 'fa-sun',
+        warna: 'text-amber-500',
+        bg: 'bg-amber-50',
+        deskripsi: 'Evaporasi adalah proses di mana air dari permukaan bumi—seperti laut di pesisir Sumalata Timur, sungai Buluwatu, waduk, dan danau—berubah bentuk menjadi uap air akibat panas sinar matahari.',
+        poinPenting: [
+          'Energi utama yang menggerakkan evaporasi adalah radiasi panas dari matahari.',
+          'Uap air yang terbentuk bersifat lebih ringan dari udara sehingga bergerak naik ke atmosfer yang lebih tinggi.',
+          'Pencemaran minyak atau sampah di laut Gorontalo Utara dapat mengganggu keseimbangan laju penguapan dan ekosistem laut.'
+        ],
+        kearifanLokal: 'Wilayah Desa Buluwatu yang berbatasan langsung dengan pesisir perairan utara menjadi titik awal alami penguapan air laut ke udara.'
+      },
+      transpirasi: {
+        judul: '2. Transpirasi (Penguapan Tumbuhan Hijau)',
+        ikon: 'fa-tree',
+        warna: 'text-emerald-600',
+        bg: 'bg-emerald-50',
+        deskripsi: 'Transpirasi adalah proses pelepasan uap air ke udara yang dilakukan oleh tumbuhan dan pepohonan hijau melalui stomata (pori-pori daun).',
+        poinPenting: [
+          'Akar pohon menyerap air dari dalam tanah, membawanya ke daun untuk fotosintesis, dan melepaskan kelebihannya sebagai uap air.',
+          'Hutan yang rimbun dan perbukitan di Sumalata Timur bertindak seperti pompa uap air alami yang menjaga kelembapan udara.',
+          'Penebangan pohon (deforestasi) akan mengurangi transpirasi dan memicu kekeringan serta hawa panas.'
+        ],
+        kearifanLokal: 'Menjaga pepohonan di lereng pegunungan Gorontalo Utara sangat krusial untuk mencegah tanah longsor dan menjaga curah hujan.'
+      },
+      kondensasi: {
+        judul: '3. Kondensasi (Pengembunan Menjadi Awan)',
+        ikon: 'fa-cloud',
+        warna: 'text-indigo-600',
+        bg: 'bg-indigo-50',
+        deskripsi: 'Kondensasi adalah perubahan uap air kembali menjadi titik-titik air kecil (embun) karena suhu di lapisan atmosfer yang semakin dingin (proses pendinginan).',
+        poinPenting: [
+          'Semakin tinggi posisi uap air di angkasa, semakin dingin suhunya.',
+          'Titik-titik air halus ini saling berkumpul di sekitar partikel debu halus (inti kondensasi) hingga membentuk gumpalan awan yang kita lihat di langit.',
+          'Ketika awan semakin tebal dan jenuh oleh air, awan akan berubah menjadi abu-abu gelap pertanda hujan.'
+        ],
+        kearifanLokal: 'Awan tebal yang kerap menyelimuti pegunungan di pagi hari merupakan bukti nyata proses kondensasi di lingkungan madrasah kita.'
+      },
+      presipitasi: {
+        judul: '4. Presipitasi (Hujan Membasahi Bumi)',
+        ikon: 'fa-cloud-showers-heavy',
+        warna: 'text-blue-600',
+        bg: 'bg-blue-50',
+        deskripsi: 'Presipitasi adalah peristiwa jatuhnya air dari awan ke permukaan bumi. Bentuk presipitasi paling umum di wilayah tropis Indonesia adalah butiran air hujan.',
+        poinPenting: [
+          'Terjadi karena titik-titik air dalam awan sudah terlalu berat dan tidak sanggup lagi ditahan oleh dorongan udara ke atas.',
+          'Hujan membawa berkah dan air segar yang mengairi sawah, ladang cengkih, kelapa, dan sumber air warga di Sumalata Timur.',
+          'Hujan lebat yang turun di wilayah gundul tanpa tanaman dapat menyebabkan erosi tanah dan banjir bandang.'
+        ],
+        kearifanLokal: 'Air hujan adalah karunia Allah SWT yang menghidupkan tanah-tanah tandus sebagaimana ditegaskan dalam surah Qaaf ayat 9.'
+      },
+      infiltrasi: {
+        judul: '5. Infiltrasi & Perkolasi (Resapan Air Tanah)',
+        ikon: 'fa-faucet-drip',
+        warna: 'text-teal-600',
+        bg: 'bg-teal-50',
+        deskripsi: 'Infiltrasi adalah proses meresapnya air hujan ke dalam pori-pori tanah. Sebagian air ini disimpan sebagai air tanah dalam (akuifer) yang menjadi sumber air sumur warga.',
+        poinPenting: [
+          'Tanah bervegetasi rimbun menyerap air jauh lebih cepat dibandingkan tanah yang tertutup semen atau aspal.',
+          'Air tanah yang bersih menjadi sumber mata air alami yang mengalir kembali menuju sungai dan bermuara ke laut lepas.',
+          'Membuat biopori dan menanam pohon di halaman madrasah membantu meningkatkan daya resap air hujan.'
+        ],
+        kearifanLokal: 'Masyarakat Desa Buluwatu sangat mengandalkan kelestarian mata air pegunungan untuk kebutuhan air minum dan wudhu harian.'
+      },
+      konservasi: {
+        judul: '6. Aksi Nyata Konservasi Air di Madrasah',
+        ikon: 'fa-hand-holding-droplet',
+        warna: 'text-emerald-700',
+        bg: 'bg-emerald-100',
+        deskripsi: 'Konservasi air adalah upaya menjaga, melindungi, dan memanfaatkan sumber daya air secara bijak, efisien, dan berkelanjutan demi kelangsungan hidup generasi mendatang.',
+        poinPenting: [
+          'Menutup keran air tempat wudhu madrasah saat tidak digunakan agar air suci tidak terbuang sia-sia.',
+          'Tidak membuang sampah plastik ke selokan, sungai Buluwatu, maupun tepi pantai perairan Gorontalo Utara.',
+          'Melakukan program penghijauan di lingkungan MIN 1 Gorontalo Utara dengan menanam pohon perindang.',
+          'Menerapkan prinsip sedekah air dan amanah khalifah fil ardh (pemimpin pemakmur bumi).'
+        ],
+        kearifanLokal: 'Menjaga kebersihan sumber air merupakan bagian tak terpisahkan dari nilai "Kebersihan Sebagian dari Iman".'
+      }
+    };
+
+    // Bank Soal Kuis (5 Butir Soal Sesuai Standar Backend)
+    const bankSoal = [
+      {
+        id: 1,
+        pertanyaan: 'Proses penguapan air laut dan sungai di pesisir Gorontalo Utara menuju atmosfer akibat pancaran panas sinar matahari dinamakan...',
+        pilihan: [
+          { kode: 'A', teks: 'Evaporasi' },
+          { kode: 'B', teks: 'Kondensasi' },
+          { kode: 'C', teks: 'Infiltrasi' },
+          { kode: 'D', teks: 'Presipitasi' }
+        ],
+        kunci: 'A',
+        pembahasan: 'Evaporasi adalah penguapan air dari badan air permukaan (laut, sungai, danau) menjadi uap air oleh panas matahari.'
+      },
+      {
+        id: 2,
+        pertanyaan: 'Ketika uap air naik ke atmosfer yang bersuhu dingin, uap air tersebut mengembun dan membentuk butiran air halus berupa gumpalan awan. Proses ini disebut...',
+        pilihan: [
+          { kode: 'A', teks: 'Transpirasi' },
+          { kode: 'B', teks: 'Kondensasi' },
+          { kode: 'C', teks: 'Asimilasi' },
+          { kode: 'D', teks: 'Infiltrasi' }
+        ],
+        kunci: 'B',
+        pembahasan: 'Kondensasi merupakan proses perubahan uap air menjadi titik-titik air halus (embun/awan) karena penurunan suhu di atmosfer.'
+      },
+      {
+        id: 3,
+        pertanyaan: 'Butiran-butiran air di awan yang telah jenuh dan berat akhirnya jatuh kembali ke daratan Desa Buluwatu dalam wujud hujan. Peristiwa ini dikenal sebagai...',
+        pilihan: [
+          { kode: 'A', teks: 'Evaporasi' },
+          { kode: 'B', teks: 'Sublimasi' },
+          { kode: 'C', teks: 'Presipitasi' },
+          { kode: 'D', teks: 'Respirasi' }
+        ],
+        kunci: 'C',
+        pembahasan: 'Presipitasi adalah curahan air dari atmosfer yang jatuh ke permukaan bumi, terutama dalam bentuk air hujan.'
+      },
+      {
+        id: 4,
+        pertanyaan: 'Mengapa pepohonan rimbun di wilayah Sumalata Timur sangat penting bagi proses infiltrasi air hujan?',
+        pilihan: [
+          { kode: 'A', teks: 'Karena akar pohon membantu menciptakan pori-pori tanah sehingga air mudah meresap ke dalam bumi' },
+          { kode: 'B', teks: 'Karena pohon menyerap seluruh air hujan sehingga sungai menjadi kering' },
+          { kode: 'C', teks: 'Karena pohon menghalangi datangnya awan hujan' },
+          { kode: 'D', teks: 'Karena pohon mengubah air hujan menjadi zat kimia beracun' }
+        ],
+        kunci: 'A',
+        pembahasan: 'Sistem perakaran pohon meningkatkan porositas tanah sehingga air hujan dapat berinfiltrasi dengan cepat ke dalam tanah menjadi cadangan air tanah.'
+      },
+      {
+        id: 5,
+        pertanyaan: 'Sebagai murid MIN 1 Gorontalo Utara yang bertakwa, tindakan nyata konservasi air yang paling tepat di lingkungan madrasah adalah...',
+        pilihan: [
+          { kode: 'A', teks: 'Membiarkan kran tempat wudhu mengalir deras meski selesai berwudhu' },
+          { kode: 'B', teks: 'Membuang sampah kemasan plastik jajanan ke dalam saluran air madrasah' },
+          { kode: 'C', teks: 'Menghemat air wudhu dan merawat tanaman biopori penampung air hujan di halaman madrasah' },
+          { kode: 'D', teks: 'Menebang pohon peneduh di sekitar kelas agar terik matahari masuk' }
+        ],
+        kunci: 'C',
+        pembahasan: 'Menghemat air wudhu dan merawat biopori/tanaman adalah perilaku terpuji yang sejalan dengan syariat Islam dan etika konservasi lingkungan.'
+      }
+    ];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Ambil data murid dari local storage jika sebelumnya sudah mengisi
+      const tersimpan = localStorage.getItem('mpi_min1_gorut_siswa');
+      if (tersimpan) {
+        try {
+          const parsed = JSON.parse(tersimpan);
+          state.murid = parsed;
+          document.getElementById('input-nama').value = parsed.nama || '';
+          document.getElementById('input-kelas').value = parsed.kelas || '';
+          document.getElementById('input-kelompok').value = parsed.kelompok || 'Mode Mandiri (15 Murid)';
+          perbaruiTampilanBannerSiswa();
+        } catch (e) {
+          console.warn('Gagal membaca cache identitas:', e);
+        }
+      }
+
+      // Tampilkan materi default (Evaporasi)
+      tampilkanDetailMateri('evaporasi');
+    });
+
+    function navigasiKe(tujuan) {
+      // Sembunyikan semua section
+      const sections = ['beranda', 'materi', 'konteks', 'simulasi', 'kuis'];
+      sections.forEach(sec => {
+        const el = document.getElementById('section-' + sec);
+        const btn = document.getElementById('btn-nav-' + sec);
+        if (el) el.classList.add('hidden');
+        if (btn) {
+          btn.classList.remove('bg-emerald-800', 'text-white');
+          btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+        }
+      });
+
+      // Tampilkan section yang dipilih
+      const aktifEl = document.getElementById('section-' + tujuan);
+      const aktifBtn = document.getElementById('btn-nav-' + tujuan);
+      if (aktifEl) aktifEl.classList.remove('hidden');
+      if (aktifBtn) {
+        aktifBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+        aktifBtn.classList.add('bg-emerald-800', 'text-white');
+      }
+
+      // Khusus kuis, perbarui label nama sebelum mulai
+      if (tujuan === 'kuis') {
+        siapkanLayarKuis();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function fokusKePendaftaran() {
+      const input = document.getElementById('input-nama');
+      if (input) {
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        input.focus();
+      }
+    }
+
+    function simpanDataSiswa(e) {
+      if (e) e.preventDefault();
+      const nama = document.getElementById('input-nama').value.trim();
+      const kelas = document.getElementById('input-kelas').value;
+      const kelompok = document.getElementById('input-kelompok').value;
+
+      if (!nama || !kelas) {
+        return;
+      }
+
+      state.murid = { nama, kelas, kelompok };
+      localStorage.setItem('mpi_min1_gorut_siswa', JSON.stringify(state.murid));
+
+      perbaruiTampilanBannerSiswa();
+
+      const notif = document.getElementById('notif-simpan-siswa');
+      notif.classList.remove('hidden');
+      setTimeout(() => notif.classList.add('hidden'), 3000);
+    }
+
+    function perbaruiTampilanBannerSiswa() {
+      if (state.murid.nama && state.murid.kelas) {
+        document.getElementById('banner-nama').textContent = state.murid.nama;
+        document.getElementById('banner-kelas').textContent = state.murid.kelas;
+        document.getElementById('banner-kelompok').textContent = state.murid.kelompok;
+        document.getElementById('banner-siswa-aktif').classList.remove('hidden');
+      }
+    }
+
+    function resetIdentitas() {
+      localStorage.removeItem('mpi_min1_gorut_siswa');
+      state.murid = { nama: '', kelas: '', kelompok: 'Mode Mandiri (15 Murid)' };
+      document.getElementById('input-nama').value = '';
+      document.getElementById('input-kelas').value = '';
+      document.getElementById('banner-siswa-aktif').classList.add('hidden');
+      navigasiKe('beranda');
+      fokusKePendaftaran();
+    }
+
+    function pilihTahapanMateri(kategori) {
+      navigasiKe('materi');
+      tampilkanDetailMateri(kategori);
+    }
+
+    function tampilkanDetailMateri(kategori) {
+      state.materiAktif = kategori;
+      const item = dataMateri[kategori] || dataMateri['evaporasi'];
+
+      // Update active tab style
+      document.querySelectorAll('.materi-tab').forEach(btn => {
+        btn.classList.remove('bg-emerald-800', 'text-white');
+        btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+      });
+      const activeBtn = document.getElementById('tab-' + kategori);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+        activeBtn.classList.add('bg-emerald-800', 'text-white');
+      }
+
+      const container = document.getElementById('materi-container');
+      container.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-2 space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl ${item.bg} ${item.warna} flex items-center justify-center text-2xl shadow-sm">
+                <i class="fa-solid ${item.ikon}"></i>
+              </div>
+              <div>
+                <h3 class="text-lg sm:text-xl font-bold font-fun text-slate-800">${item.judul}</h3>
+                <span class="text-xs text-slate-500">Konsep Sains &amp; Lingkungan Hidup</span>
+              </div>
+            </div>
+
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed pt-2">
+              ${item.deskripsi}
+            </p>
+
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 mt-4">
+              <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                <i class="fa-solid fa-list-check text-emerald-600"></i> Fakta Sains Penting:
+              </h4>
+              <ul class="space-y-2 text-xs sm:text-sm text-slate-600">
+                ${item.poinPenting.map(p => `
+                  <li class="flex items-start gap-2">
+                    <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                    <span>${p}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-br from-emerald-50 to-teal-100/70 p-5 rounded-3xl border border-emerald-200/60 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-2">
+                <i class="fa-solid fa-location-dot text-rose-500"></i>
+                <span>Konteks Gorontalo Utara</span>
+              </div>
+              <h5 class="text-sm font-bold text-slate-800 mb-2 font-fun">Kearifan Alam Buluwatu</h5>
+              <p class="text-xs text-slate-700 leading-relaxed mb-4">
+                ${item.kearifanLokal}
+              </p>
+            </div>
+
+            <div class="bg-white/80 backdrop-blur-sm p-3.5 rounded-2xl border border-emerald-200 text-xs text-emerald-950 font-medium space-y-2">
+              <p><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Uji pemahamanmu di menu Simulasi setelah membaca materi ini!</p>
+              <button onclick="navigasiKe('simulasi')" class="w-full bg-emerald-800 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1 transition">
+                <span>Buka Simulasi Virtual</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function jalankanProsesSimulasi(tahap) {
+      const infoTitle = document.getElementById('sim-info-title');
+      const infoDesc = document.getElementById('sim-info-desc');
+      const statusBadge = document.getElementById('sim-status-badge');
+      const sun = document.getElementById('sim-sun');
+      const cloud1 = document.getElementById('sim-cloud-1');
+      const rainCloud = document.getElementById('sim-rain-cloud');
+      const rainContainer = document.getElementById('rain-drops-container');
+      const vaporParticles = document.getElementById('vapor-particles');
+
+      // Reset sementara efek
+      sun.classList.remove('glow-active', 'scale-125');
+      cloud1.classList.remove('glow-active');
+      rainCloud.classList.remove('opacity-100');
+      vaporParticles.classList.add('hidden');
+      rainContainer.classList.add('hidden');
+
+      if (tahap === 'evaporasi') {
+        sun.classList.add('glow-active', 'scale-125');
+        vaporParticles.classList.remove('hidden');
+        statusBadge.textContent = 'Proses 1: Evaporasi';
+        statusBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900';
+        infoTitle.innerHTML = '<i class="fa-solid fa-sun text-amber-500"></i> Evaporasi Sedang Berlangsung';
+        infoDesc.textContent = 'Matahari menyinari lautan Gorontalo Utara. Panasnya mengubah air laut menjadi uap air yang naik ke atmosfer.';
+      } else if (tahap === 'kondensasi') {
+        cloud1.classList.add('glow-active');
+        statusBadge.textContent = 'Proses 2: Kondensasi';
+        statusBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-900';
+        infoTitle.innerHTML = '<i class="fa-solid fa-cloud text-indigo-500"></i> Kondensasi Terbentuk';
+        infoDesc.textContent = 'Uap air yang telah tinggi di udara mengalami pendinginan, mengembun dan mengelompok membentuk awan putih yang sejuk.';
+      } else if (tahap === 'presipitasi') {
+        rainCloud.classList.add('opacity-100');
+        rainContainer.classList.remove('hidden');
+        statusBadge.textContent = 'Proses 3: Presipitasi';
+        statusBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900';
+        infoTitle.innerHTML = '<i class="fa-solid fa-cloud-showers-heavy text-blue-600"></i> Hujan Turun (Presipitasi)';
+        infoDesc.textContent = 'Gumpalan awan telah jenuh oleh butir-butir air berat. Titik-titik air jatuh sebagai hujan yang membasahi tanah Buluwatu.';
+      } else if (tahap === 'infiltrasi') {
+        statusBadge.textContent = 'Proses 4: Infiltrasi';
+        statusBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900';
+        infoTitle.innerHTML = '<i class="fa-solid fa-seedling text-emerald-600"></i> Infiltrasi Air Tanah';
+        infoDesc.textContent = 'Air hujan yang jatuh diserap oleh tanah dan akar pepohonan di lereng bukit Sumalata Timur, menjadi cadangan mata air bersih.';
+      }
+    }
+
+    function resetSimulasi() {
+      document.getElementById('sim-sun').classList.remove('glow-active', 'scale-125');
+      document.getElementById('sim-cloud-1').classList.remove('glow-active');
+      document.getElementById('sim-rain-cloud').classList.remove('opacity-100');
+      document.getElementById('vapor-particles').classList.add('hidden');
+      document.getElementById('rain-drops-container').classList.remove('hidden');
+      document.getElementById('sim-status-badge').textContent = 'Siap';
+      document.getElementById('sim-status-badge').className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800';
+      document.getElementById('sim-info-title').innerHTML = '<i class="fa-solid fa-circle-info text-sky-600"></i> Petunjuk Simulasi';
+      document.getElementById('sim-info-desc').textContent = 'Silakan pilih salah satu tombol proses di panel bawah untuk menjalankan tahapan siklus air secara visual.';
+    }
+
+    function siapkanLayarKuis() {
+      // Cek apakah data murid sudah ada
+      if (!state.murid.nama || !state.murid.kelas) {
+        document.getElementById('kuis-cek-nama').textContent = 'Belum diisi (Wajib)';
+        document.getElementById('kuis-cek-nama').className = 'font-bold text-rose-600';
+        document.getElementById('kuis-cek-kelas').textContent = 'Belum dipilih';
+        document.getElementById('kuis-cek-kelompok').textContent = 'Mode Mandiri';
+      } else {
+        document.getElementById('kuis-cek-nama').textContent = state.murid.nama;
+        document.getElementById('kuis-cek-nama').className = 'font-bold text-slate-900';
+        document.getElementById('kuis-cek-kelas').textContent = state.murid.kelas;
+        document.getElementById('kuis-cek-kelompok').textContent = state.murid.kelompok;
+      }
+
+      // Pastikan tampilan awal kuis adalah info / intro jika belum pernah submit
+      if (!state.sudahSubmit) {
+        document.getElementById('kuis-intro').classList.remove('hidden');
+        document.getElementById('kuis-box').classList.add('hidden');
+        document.getElementById('kuis-hasil').classList.add('hidden');
+      }
+    }
+
+    function mulaiKuisSekarang() {
+      if (!state.murid.nama || !state.murid.kelas) {
+        navigasiKe('beranda');
+        fokusKePendaftaran();
+        return;
+      }
+
+      state.soalIndex = 0;
+      state.jawabanMurid = {};
+      state.sudahSubmit = false;
+
+      document.getElementById('kuis-intro').classList.add('hidden');
+      document.getElementById('kuis-hasil').classList.add('hidden');
+      document.getElementById('kuis-box').classList.remove('hidden');
+
+      tampilkanSoal(state.soalIndex);
+    }
+
+    function tampilkanSoal(idx) {
+      const soal = bankSoal[idx];
+      if (!soal) return;
+
+      document.getElementById('nomor-soal-aktif').textContent = idx + 1;
+      const persen = Math.round(((idx + 1) / bankSoal.length) * 100);
+      document.getElementById('label-persen-kuis').textContent = persen + '%';
+      document.getElementById('bar-progress-kuis').style.width = persen + '%';
+
+      document.getElementById('pertanyaan-teks').textContent = soal.pertanyaan;
+
+      // Render opsi
+      const container = document.getElementById('opsi-jawaban-container');
+      container.innerHTML = soal.pilihan.map(opt => {
+        const isDipilih = state.jawabanMurid[soal.id] === opt.kode;
+        return `
+          <div onclick="pilihOpsiJawaban(${soal.id}, '${opt.kode}')" class="cursor-pointer p-3.5 sm:p-4 rounded-2xl border transition-all flex items-center gap-3.5 ${
+            isDipilih
+              ? 'bg-emerald-50 border-emerald-500 shadow-sm text-emerald-950 font-semibold'
+              : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700'
+          }">
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold ${
+              isDipilih ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'
+            }">
+              ${opt.kode}
+            </div>
+            <span class="text-xs sm:text-sm leading-snug">${opt.teks}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Tombol sebelumnya / selanjutnya
+      document.getElementById('btn-soal-prev').disabled = idx === 0;
+      const btnNext = document.getElementById('btn-soal-next');
+      if (idx === bankSoal.length - 1) {
+        btnNext.innerHTML = '<span>Kirim Nilai</span> <i class="fa-solid fa-paper-plane ml-1"></i>';
+        btnNext.className = 'bg-teal-700 hover:bg-teal-600 text-white px-6 py-2 rounded-xl text-xs font-bold transition shadow-md flex items-center gap-1.5';
+      } else {
+        btnNext.innerHTML = '<span>Lanjut</span> <i class="fa-solid fa-arrow-right ml-1"></i>';
+        btnNext.className = 'bg-emerald-800 hover:bg-emerald-700 text-white px-6 py-2 rounded-xl text-xs font-bold transition shadow-md flex items-center gap-1.5';
+      }
+    }
+
+    function pilihOpsiJawaban(soalId, kode) {
+      state.jawabanMurid[soalId] = kode;
+      tampilkanSoal(state.soalIndex);
+    }
+
+    function soalSebelumnya() {
+      if (state.soalIndex > 0) {
+        state.soalIndex--;
+        tampilkanSoal(state.soalIndex);
+      }
+    }
+
+    function soalSelanjutnya() {
+      const soalSaatIni = bankSoal[state.soalIndex];
+      if (!state.jawabanMurid[soalSaatIni.id]) {
+        // Beri getaran halus atau indikasi visual
+        const container = document.getElementById('opsi-jawaban-container');
+        container.classList.add('ring-2', 'ring-amber-400');
+        setTimeout(() => container.classList.remove('ring-2', 'ring-amber-400'), 800);
+        return;
+      }
+
+      if (state.soalIndex < bankSoal.length - 1) {
+        state.soalIndex++;
+        tampilkanSoal(state.soalIndex);
+      } else {
+        // Terakhir: Hitung dan kirim ke backend GAS
+        selesaikanDanKirimKuis();
+      }
+    }
+
+    function selesaikanDanKirimKuis() {
+      let jumlahBenar = 0;
+      const detail = {};
+
+      bankSoal.forEach(s => {
+        const dipilih = state.jawabanMurid[s.id] || '-';
+        const benar = dipilih === s.kunci;
+        if (benar) jumlahBenar++;
+        detail['Soal_' + s.id] = {
+          dipilih: dipilih,
+          kunci: s.kunci,
+          status: benar ? 'BENAR' : 'SALAH'
+        };
+      });
+
+      const totalSoal = bankSoal.length;
+      const skor = Math.round((jumlahBenar / totalSoal) * 100);
+      state.skorAkhir = skor;
+
+      let predikat = 'Perlu Belajar Lebih Giat';
+      if (skor >= 85) predikat = 'Istimewa / Mumtaz';
+      else if (skor >= 70) predikat = 'Sangat Baik / Jayyid Jiddan';
+      else if (skor >= 50) predikat = 'Cukup Baik';
+
+      // Tampilkan ke UI hasil
+      document.getElementById('hasil-skor').textContent = skor;
+      document.getElementById('hasil-benar').textContent = `${jumlahBenar} / ${totalSoal}`;
+      document.getElementById('hasil-predikat').textContent = predikat;
+
+      document.getElementById('kuis-box').classList.add('hidden');
+      document.getElementById('kuis-hasil').classList.remove('hidden');
+      state.sudahSubmit = true;
+
+      // Efek confetti jika nilai bagus
+      if (skor >= 70 && typeof confetti === 'function') {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+
+      // Siapkan payload data sesuai dengan spesifikasi simpanHasilKuis(data) di backend GAS
+      const payload = {
+        nama: state.murid.nama,
+        kelas: state.murid.kelas,
+        kategori: state.murid.kelompok || 'Mode Mandiri (15 Murid)',
+        skor: skor,
+        benar: jumlahBenar,
+        totalSoal: totalSoal,
+        predikat: predikat,
+        detailJawaban: detail
+      };
+
+      kirimKeGoogleAppsScript(payload);
+    }
+
+    function kirimKeGoogleAppsScript(data) {
+      const statusBox = document.getElementById('status-kirim-gas');
+      statusBox.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-center justify-center gap-3';
+      statusBox.innerHTML = `
+        <i class="fa-solid fa-spinner fa-spin text-lg"></i>
+        <span>Menghubungkan ke Google Spreadsheet guru MIN 1 Gorontalo Utara...</span>
+      `;
+
+      // Cek apakah aplikasi sedang berjalan di dalam container Web App Google Apps Script
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(response) {
+            if (response && response.success) {
+              statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center justify-center gap-3';
+              statusBox.innerHTML = `
+                <i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+                <div class="text-left">
+                  <p class="font-bold">${response.message}</p>
+                  <p class="text-[11px] text-emerald-600">Waktu WITA: ${response.waktu} &bull; Baris Data: ${response.baris}</p>
+                </div>
+              `;
+            } else {
+              statusBox.className = 'p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-center gap-3';
+              statusBox.innerHTML = `
+                <i class="fa-solid fa-triangle-exclamation text-rose-600 text-lg"></i>
+                <span>${(response && response.message) || 'Gagal menyimpan nilai ke spreadsheet.'}</span>
+              `;
+            }
+          })
+          .withFailureHandler(function(error) {
+            statusBox.className = 'p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-center gap-3';
+            statusBox.innerHTML = `
+              <i class="fa-solid fa-triangle-exclamation text-rose-600 text-lg"></i>
+              <span>Gagal memanggil GAS: ${error.message}</span>
+            `;
+          })
+          .simpanHasilKuis(data);
+      } else {
+        // Fallback Simulasi Mandiri (Mode Preview / Uji Coba di Luar Iframe GAS)
+        setTimeout(() => {
+          statusBox.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center justify-center gap-3';
+          statusBox.innerHTML = `
+            <i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+            <div class="text-left">
+              <p class="font-bold">Alhamdulillah, nilai ananda ${data.nama} siap terekam!</p>
+              <p class="text-[11px] text-emerald-600">(Mode Pratinjau: Backend terdeteksi siap dihubungkan ke Google Apps Script Spreadsheet)</p>
+            </div>
+          `;
+        }, 1200);
+      }
+    }
+
+    function ulangiKuis() {
+      state.jawabanMurid = {};
+      state.soalIndex = 0;
+      state.sudahSubmit = false;
+      mulaiKuisSekarang();
+    }
+
+    function bukaModalStatistik() {
+      document.getElementById('modal-guru').classList.remove('hidden');
+      muatStatistikGuru();
+    }
+
+    function tutupModalStatistik() {
+      document.getElementById('modal-guru').classList.add('hidden');
+    }
+
+    function muatStatistikGuru() {
+      const elTotal = document.getElementById('stat-total-siswa');
+      const elRata = document.getElementById('stat-rata-rata');
+
+      elTotal.textContent = '...';
+      elRata.textContent = '...';
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (res) {
+              elTotal.textContent = res.totalSiswa || 0;
+              elRata.textContent = res.rataRata || 0;
+            }
+          })
+          .withFailureHandler(function() {
+            elTotal.textContent = '0';
+            elRata.textContent = '0';
+          })
+          .ambilStatistikRingkas();
+      } else {
+        // Data simulasi pratinjau
+        setTimeout(() => {
+          elTotal.textContent = '15';
+          elRata.textContent = '86.4';
+        }, 600);
+      }
+    }
+  </script>
+</body>
+</html>
